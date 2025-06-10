@@ -101,7 +101,7 @@ define(['d3'], function () {
         },
 
         command: function (entry) {
-            if (entry.trim === '') {
+            if (entry.trim() === '') {
                 return;
             }
 
