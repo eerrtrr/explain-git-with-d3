@@ -35,34 +35,35 @@
   </div>
   <div class="row command-list">
     <div class="twocol">
-      <h4>Basic Commands</h3>
+      <h4>Basic</h4>
       <a id="open-commit" class="openswitch" href="#commit">git commit</a>
       <a id="open-branch" class="openswitch" href="#branch">git branch</a>
-    </div>
-    <div class="twocol">
-      <h4>&nbsp;</h4>
+      <a id="open-switch" class="openswitch" href="#switch">git switch</a>
       <a id="open-checkout" class="openswitch" href="#checkout">git checkout</a>
+    </div>
+    <div class="twocol">
+      <h4>Branching</h4>
       <a id="open-checkout-b" class="openswitch" href="#checkout-b">git checkout -b</a>
-    </div>
-    <div class="twocol">
-      <h4>Undo Commits</h4>
-      <a id="open-reset" class="openswitch" href="#reset">git reset</a>
-      <a id="open-revert" class="openswitch" href="#revert">git revert</a>
-    </div>
-    <div class="twocol">
-      <h4>Combine Branches</h4>
       <a id="open-merge" class="openswitch" href="#merge">git merge</a>
       <a id="open-rebase" class="openswitch" href="#rebase">git rebase</a>
+      <a id="open-cherry-pick" class="openswitch" href="#cherry-pick">git cherry-pick</a>
     </div>
     <div class="twocol">
-      <h4>Remote Server</h4>
+      <h4>History</h4>
+      <a id="open-log" class="openswitch" href="#log">git log</a>
+      <a id="open-tag" class="openswitch" href="#tag">git tag</a>
+      <a id="open-revert" class="openswitch" href="#revert">git revert</a>
+      <a id="open-reset" class="openswitch" href="#reset">git reset</a>
+    </div>
+    <div class="twocol">
+      <h4>Remote</h4>
       <a id="open-fetch" class="openswitch" href="#fetch">git fetch</a>
       <a id="open-pull" class="openswitch" href="#pull">git pull</a>
+      <a id="open-push" class="openswitch" href="#push">git push</a>
     </div>
     <div class="twocol last">
-      <h4>&nbsp;</h4>
-      <a id="open-push" class="openswitch" href="#push">git push</a>
-      <a id="open-tag" class="openswitch" href="#tag">git tag</a>
+      <h4>Advanced</h4>
+      <a id="open-clean" class="openswitch" href="#clean">git clean</a>
     </div>
   </div>
   <div class="row concept-area">
@@ -259,6 +260,18 @@
     <div id="ExplainGitFree-Container" class="twelvecol concept-container">
       <p>
         Do whatever you want in this free playground.
+      </p>
+      <div class="playground-container"></div>
+    </div>
+    <div id="ExplainGitSwitch-Container" class="twelvecol concept-container">
+      <p>
+        <span class="cmd">git switch branchname</span> is the modern way to switch branches. Try switching between branches and observe the changes.
+      </p>
+      <div class="playground-container"></div>
+    </div>
+    <div id="ExplainGitCherry-pick-Container" class="twelvecol concept-container">
+      <p>
+        <span class="cmd">git cherry-pick commit</span> applies the changes from the given commit onto your current branch. Try cherry-picking a commit.
       </p>
       <div class="playground-container"></div>
     </div>

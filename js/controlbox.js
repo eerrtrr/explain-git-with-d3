@@ -18,13 +18,13 @@ define(['d3'], function () {
     ControlBox.prototype = {
         render: function (container) {
             var cBox = this,
-                cBoxContainer, log, input;
+                cBoxContainer, logArea, input;
 
             cBoxContainer = container.append('div')
                 .classed('control-box', true);
 
 
-            log = cBoxContainer.append('div')
+            logArea = cBoxContainer.append('div')
                 .classed('log', true);
 
             input = cBoxContainer.append('input')
@@ -77,14 +77,14 @@ define(['d3'], function () {
             });
 
             this.container = cBoxContainer;
-            this.log = log;
+            this.logArea = logArea;
             this.input = input;
 
             this.info(this.initialMessage);
         },
 
         destroy: function () {
-            this.log.remove();
+            this.logArea.remove();
             this.input.remove();
             this.container.remove();
 
@@ -96,8 +96,8 @@ define(['d3'], function () {
         },
 
         _scrollToBottom: function () {
-            var log = this.log.node();
-            log.scrollTop = log.scrollHeight;
+            var logArea = this.logArea.node();
+            logArea.scrollTop = logArea.scrollHeight;
         },
 
         command: function (entry) {
@@ -106,8 +106,9 @@ define(['d3'], function () {
             }
 
             var split = entry.split(' ');
+            console.log('Command split:', split); // Debug log
 
-            this.log.append('div')
+            this.logArea.append('div')
                 .classed('command-entry', true)
                 .html(entry);
 
@@ -119,11 +120,13 @@ define(['d3'], function () {
 
             var method = split[1],
                 args = split.slice(2);
+            console.log('Method:', method, 'Args:', args); // Debug log
 
             try {
                 if (typeof this[method] === 'function') {
                     this[method](args);
                 } else {
+                    console.log('Command split:', split); // Debug log
                     this.error();
                 }
             } catch (ex) {
@@ -133,13 +136,13 @@ define(['d3'], function () {
         },
 
         info: function (msg) {
-            this.log.append('div').classed('info', true).html(msg);
+            this.logArea.append('div').classed('info', true).html(msg);
             this._scrollToBottom();
         },
 
         error: function (msg) {
             msg = msg || 'I don\'t understand that.';
-            this.log.append('div').classed('error', true).html(msg);
+            this.logArea.append('div').classed('error', true).html(msg);
             this._scrollToBottom();
         },
 
@@ -512,6 +515,69 @@ define(['d3'], function () {
                 if (path[2] === 'rebase') {
                     this.rebase[path[1]] = args.pop();
                 }
+            }
+        },
+
+        switch: function (args) {
+            // git switch branchname
+            if (args.length < 1) {
+                this.info('You need to specify a branch to switch to.');
+                return;
+            }
+            var branch = args[0];
+            try {
+                this.historyView.checkout(branch);
+            } catch (err) {
+                this.error(err.message);
+            }
+        },
+
+        log: function (args) {
+            // git log: highlight commit path from HEAD to initial, show messages
+            var local = this.historyView;
+            var commit = local.getCommit('HEAD');
+            if (!commit) {
+                this.info('No commits to show.');
+                return;
+            }
+            var path = [];
+            var seen = {};
+            while (commit && !seen[commit.id]) {
+                path.push(commit);
+                seen[commit.id] = true;
+                commit = local.getCommit(commit.parent);
+            }
+            // Highlight path in the graph
+            local.svg.selectAll('circle.commit').classed('log-highlight', false);
+            path.forEach(function(c) {
+                local.svg.select('#' + local.name + '-' + c.id).classed('log-highlight', true);
+            });
+            // Show messages in the log
+            this.info('<b>git log:</b>');
+            path.forEach(function(c) {
+                var msg = c.message || c.id;
+                this.info(msg);
+            }, this);
+        },
+
+        'cherry-pick': function (args) {
+            // git cherry-pick commit
+            if (args.length < 1) {
+                this.info('You need to specify a commit to cherry-pick.');
+                return;
+            }
+            var commitId = args[0];
+            var commit = this.historyView.getCommit(commitId);
+            if (!commit) {
+                this.error('Commit not found: ' + commitId);
+                return;
+            }
+            // Simulate cherry-pick: create a new commit on HEAD with the same message
+            try {
+                this.historyView.commit({}, commit.message ? '[cherry-pick] ' + commit.message : '[cherry-pick]');
+                this.info('Cherry-picked commit ' + commitId + ' onto current branch.');
+            } catch (err) {
+                this.error(err.message);
             }
         }
     };

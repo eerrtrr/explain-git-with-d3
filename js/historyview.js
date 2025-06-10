@@ -1054,6 +1054,25 @@ define(['d3'], function () {
             } else {
                 this.checkout(rebasedCommit.id);
             }
+        },
+
+        // Simulate cherry-pick by duplicating a commit's message on HEAD as a new commit
+        cherryPick: function (ref) {
+            var commit = this.getCommit(ref);
+
+            if (!commit) {
+                throw new Error('Cannot find commit: ' + ref);
+            }
+
+            this.commit({
+                id: HistoryView.generateId(),
+                parent: 'HEAD',
+                message: commit.message,
+                tags: commit.tags.slice()
+            });
+
+            this.checkout('HEAD');
+            return this;
         }
     };
 

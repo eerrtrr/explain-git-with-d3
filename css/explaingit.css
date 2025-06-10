@@ -191,6 +191,12 @@ circle.commit.branchless {
     stroke: #DDD;
 }
 
+circle.commit.log-highlight {
+    stroke: #0074D9;
+    stroke-width: 6;
+    fill: #e6f7ff;
+}
+
 .commit-pointer {
     stroke: #666;
     stroke-width: 4;
