@@ -18,9 +18,8 @@
 <h3><a id="start-test" href="#">Start Test</a></h3>
 <script type="text/javascript">
 require(['explaingit'], function (explainGit) {
+    var openSwitch = document.getElementById('start-test');
     var open = function () {
-        openSwitch.style.display = 'none';
-
         explainGit.open({
             name: 'Memtest',
             height: 250,
@@ -30,7 +29,8 @@ require(['explaingit'], function (explainGit) {
         });
     };
 
-    document.getElementById('start-test').addEventListener('click', function () {
+    openSwitch.addEventListener('click', function () {
+        openSwitch.style.display = 'none';
         for (var i = 0; i < 100; i++) {
             open();
             explainGit.reset();
